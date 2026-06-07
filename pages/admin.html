@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — FixIt</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="brand">Fix<span>It</span></a>
+    <div class="nav-links">
+      <a href="services.html">Find Workers</a>
+      <span style="color:#6b7280;font-size:.82rem;padding:.3rem .8rem;background:#f3f4f6;border-radius:99px;">🔒 Admin Panel</span>
+    </div>
+  </nav>
+
+  <!-- LOGIN -->
+  <div id="loginScreen">
+    <div class="admin-login">
+      <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
+      <h2>Admin Login</h2>
+      <div class="form-group" style="text-align:left;">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div class="form-error" id="loginErr"></div>
+      </div>
+      <button class="btn-next" style="width:100%;" onclick="doLogin()">Login →</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" style="display:none;">
+    <div class="page-hero">
+      <h1>FixIt Admin Panel</h1>
+      <p>Manage workers, verify profiles, and monitor platform growth</p>
+    </div>
+
+    <div class="admin-page">
+
+      <!-- STATS -->
+      <div class="stats-row" id="statsRow"></div>
+
+      <!-- CONTROLS -->
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.2rem;align-items:center;">
+        <input type="text" id="adminSearch" placeholder="Search by name, skill, or area..." 
+          style="border:1.5px solid #e5e7eb;border-radius:8px;padding:.55rem .9rem;font-size:.88rem;flex:1;min-width:200px;outline:none;font-family:'DM Sans',sans-serif;"
+          oninput="renderTable()"/>
+        <select id="adminFilter" onchange="renderTable()"
+          style="border:1.5px solid #e5e7eb;border-radius:8px;padding:.55rem .9rem;font-size:.88rem;outline:none;font-family:'DM Sans',sans-serif;">
+          <option value="">All Workers</option>
+          <option value="verified">Verified Only</option>
+          <option value="unverified">Unverified Only</option>
+        </select>
+        <button onclick="renderTable()" style="padding:.55rem 1.2rem;background:#0a6e55;color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;font-size:.88rem;">Refresh</button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Skill</th>
+              <th>Area</th>
+              <th>Phone</th>
+              <th>Rating</th>
+              <th>Joined</th>
+              <th>Verified</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+      <div id="adminEmpty" style="display:none;text-align:center;padding:3rem;color:#6b7280;">
+        <div style="font-size:2.5rem;margin-bottom:.8rem;">📋</div>
+        <p>No workers match your search.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script>
+    const ADMIN_PASS = "fixit2024";
+
+    function doLogin() {
+      const pass = document.getElementById("adminPass").value;
+      if (pass === ADMIN_PASS) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        renderStats();
+        renderTable();
+      } else {
+        document.getElementById("loginErr").textContent = "Incorrect password. Try again.";
+        document.getElementById("adminPass").value = "";
+      }
+    }
+
+    function getAdminWorkers() {
+      return getAllWorkers();
+    }
+
+    function toggleVerify(id) {
+      // For demo workers (from data.js), toggle in localStorage override
+      const overrides = JSON.parse(localStorage.getItem("fixit_overrides") || "{}");
+      const workers = getAdminWorkers();
+      const w = workers.find(x => String(x.id) === String(id));
+      if (!w) return;
+      const current = overrides[id] !== undefined ? overrides[id] : w.verified;
+      overrides[id] = !current;
+      localStorage.setItem("fixit_overrides", JSON.stringify(overrides));
+      renderStats();
+      renderTable();
+    }
+
+    function deleteWorker(id) {
+      if (!confirm("Delete this worker? This cannot be undone.")) return;
+      // Only delete from stored workers (not demo data)
+      const stored = JSON.parse(localStorage.getItem("fixit_workers") || "[]");
+      const updated = stored.filter(w => String(w.id) !== String(id));
+      localStorage.setItem("fixit_workers", JSON.stringify(updated));
+      renderStats();
+      renderTable();
+    }
+
+    function getEffectiveVerified(w) {
+      const overrides = JSON.parse(localStorage.getItem("fixit_overrides") || "{}");
+      return overrides[w.id] !== undefined ? overrides[w.id] : w.verified;
+    }
+
+    function renderStats() {
+      const workers = getAdminWorkers();
+      const verified = workers.filter(w => getEffectiveVerified(w)).length;
+      const skills = {};
+      workers.forEach(w => { skills[w.skill] = (skills[w.skill]||0) + 1; });
+      const topSkill = Object.entries(skills).sort((a,b)=>b[1]-a[1])[0];
+
+      document.getElementById("statsRow").innerHTML = `
+        <div class="stat-card"><div class="stat-val">${workers.length}</div><div class="stat-lbl">Total Workers</div></div>
+        <div class="stat-card"><div class="stat-val" style="color:#f59e0b;">${verified}</div><div class="stat-lbl">Verified</div></div>
+        <div class="stat-card"><div class="stat-val" style="color:#ef4444;">${workers.length - verified}</div><div class="stat-lbl">Pending Verification</div></div>
+        <div class="stat-card"><div class="stat-val" style="font-size:1.3rem;">${topSkill ? topSkill[0] : "—"}</div><div class="stat-lbl">Most Listed Skill (${topSkill ? topSkill[1] : 0})</div></div>
+      `;
+    }
+
+    function renderTable() {
+      const search = (document.getElementById("adminSearch").value||"").toLowerCase();
+      const filter = document.getElementById("adminFilter").value;
+      let workers = getAdminWorkers();
+
+      if (search) {
+        workers = workers.filter(w =>
+          w.name.toLowerCase().includes(search) ||
+          w.skill.toLowerCase().includes(search) ||
+          w.area.toLowerCase().includes(search)
+        );
+      }
+      if (filter === "verified") workers = workers.filter(w => getEffectiveVerified(w));
+      if (filter === "unverified") workers = workers.filter(w => !getEffectiveVerified(w));
+
+      const tbody = document.getElementById("adminTableBody");
+      const empty = document.getElementById("adminEmpty");
+
+      if (workers.length === 0) {
+        tbody.innerHTML = "";
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+
+      tbody.innerHTML = workers.map((w, i) => {
+        const isVer = getEffectiveVerified(w);
+        const isDemoWorker = typeof w.id === "number" && w.id <= 10;
+        return `
+          <tr>
+            <td style="color:#9ca3af;">${i+1}</td>
+            <td><strong>${w.name}</strong></td>
+            <td><span class="badge-skill" style="font-size:.75rem;">${SKILL_ICONS[w.skill]||"🔧"} ${w.skill}</span></td>
+            <td>${w.area}</td>
+            <td><a href="tel:${w.phone}" style="color:#0a6e55;font-weight:500;">${w.phone}</a></td>
+            <td>${w.rating > 0 ? `<span style="color:#f59e0b;">★</span> ${Number(w.rating).toFixed(1)}` : '<span style="color:#9ca3af;">New</span>'}</td>
+            <td style="font-size:.8rem;color:#6b7280;">${w.joined || "—"}</td>
+            <td>
+              <button class="toggle-verified ${isVer ? 'is-verified' : 'not-verified'}" onclick="toggleVerify('${w.id}')">
+                ${isVer ? "✅ Verified" : "⬜ Verify"}
+              </button>
+            </td>
+            <td>
+              ${!isDemoWorker ? `<button class="btn-delete" onclick="deleteWorker('${w.id}')">Delete</button>` : '<span style="color:#d1d5db;font-size:.75rem;">Demo</span>'}
+            </td>
+          </tr>`;
+      }).join("");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FixIt — Trusted Home Services in Bengaluru</title>
+  <meta name="description" content="Find trusted electricians, plumbers, painters and more in Bengaluru. Contact directly, no booking fees."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">Fix<span>It</span></a>
+    <div class="nav-links">
+      <a href="pages/services.html">Find Workers</a>
+      <a href="pages/register.html" class="btn-outline">List Yourself Free</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="pages/services.html">Find Workers</a>
+    <a href="pages/register.html">List Yourself Free</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">🏙️ Serving Bengaluru</div>
+    <h1>Find trusted home service<br/><span class="highlight">workers near you</span></h1>
+    <p class="hero-sub">Electricians, plumbers, painters & more — verified workers, direct contact, zero commission fees.</p>
+
+    <div class="search-box">
+      <div class="search-field">
+        <label>What do you need?</label>
+        <select id="searchCategory">
+          <option value="">Select a service</option>
+          <option>Electrician</option>
+          <option>Plumber</option>
+          <option>Civil Contractor</option>
+          <option>Painter</option>
+          <option>Carpenter</option>
+          <option>AC Repair</option>
+          <option>Home Cleaning</option>
+          <option>Locksmith</option>
+          <option>Packers & Movers</option>
+          <option>Gardener</option>
+          <option>Fabricator</option>
+          <option>Interior Designer</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Your area in Bengaluru</label>
+        <select id="searchArea">
+          <option value="">Select area</option>
+          <option>Koramangala</option>
+          <option>HSR Layout</option>
+          <option>Whitefield</option>
+          <option>Indiranagar</option>
+          <option>Jayanagar</option>
+          <option>Marathahalli</option>
+          <option>Electronic City</option>
+          <option>Hebbal</option>
+          <option>BTM Layout</option>
+          <option>Banashankari</option>
+          <option>JP Nagar</option>
+          <option>Yeshwanthpur</option>
+        </select>
+      </div>
+      <button class="btn-search" onclick="doSearch()">Search Workers</button>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <div style="background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:.85rem 2rem;text-align:center;">
+    <div style="max-width:900px;margin:0 auto;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;font-size:.85rem;color:#166534;font-weight:500;">
+      <span>✅ Verified Workers</span>
+      <span>📞 Direct Contact</span>
+      <span>💰 Zero Commission</span>
+      <span>⭐ Real Reviews</span>
+      <span>🏙️ Bengaluru Local</span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section categories-section">
+    <div class="container">
+      <h2 class="section-title">Browse by service</h2>
+      <p class="section-sub">Tap any category to see available workers near you</p>
+      <div class="categories-grid">
+        <a href="pages/services.html?category=Electrician" class="cat-card"><div class="cat-icon">⚡</div><div class="cat-name">Electrician</div></a>
+        <a href="pages/services.html?category=Plumber" class="cat-card"><div class="cat-icon">🔧</div><div class="cat-name">Plumber</div></a>
+        <a href="pages/services.html?category=Civil+Contractor" class="cat-card"><div class="cat-icon">🏗️</div><div class="cat-name">Civil Contractor</div></a>
+        <a href="pages/services.html?category=Painter" class="cat-card"><div class="cat-icon">🎨</div><div class="cat-name">Painter</div></a>
+        <a href="pages/services.html?category=Carpenter" class="cat-card"><div class="cat-icon">🪟</div><div class="cat-name">Carpenter</div></a>
+        <a href="pages/services.html?category=AC+Repair" class="cat-card"><div class="cat-icon">❄️</div><div class="cat-name">AC Repair</div></a>
+        <a href="pages/services.html?category=Home+Cleaning" class="cat-card"><div class="cat-icon">🧹</div><div class="cat-name">Home Cleaning</div></a>
+        <a href="pages/services.html?category=Locksmith" class="cat-card"><div class="cat-icon">🔒</div><div class="cat-name">Locksmith</div></a>
+        <a href="pages/services.html?category=Packers+%26+Movers" class="cat-card"><div class="cat-icon">📦</div><div class="cat-name">Packers & Movers</div></a>
+        <a href="pages/services.html?category=Gardener" class="cat-card"><div class="cat-icon">🌿</div><div class="cat-name">Gardener</div></a>
+        <a href="pages/services.html?category=Fabricator" class="cat-card"><div class="cat-icon">🔨</div><div class="cat-name">Fabricator</div></a>
+        <a href="pages/services.html?category=Interior+Designer" class="cat-card"><div class="cat-icon">🏠</div><div class="cat-name">Interior Designer</div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section hiw-section">
+    <div class="container">
+      <h2 class="section-title">How FixIt works</h2>
+      <p class="section-sub">Get help in 3 simple steps — no apps, no waiting</p>
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-num">1</div>
+          <div class="hiw-icon">🔍</div>
+          <h3>Search your service</h3>
+          <p>Choose the service you need and your area in Bengaluru. Results appear instantly.</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num">2</div>
+          <div class="hiw-icon">👷</div>
+          <h3>Browse nearby workers</h3>
+          <p>See verified workers near you with real ratings, experience, and full profiles.</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num">3</div>
+          <div class="hiw-icon">📲</div>
+          <h3>Call or WhatsApp directly</h3>
+          <p>Contact workers directly. No booking fees, no middlemen, no commission ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT WORKERS -->
+  <section class="section recent-section" style="background:#f9fafb;">
+    <div class="container">
+      <h2 class="section-title">Recently joined workers</h2>
+      <p class="section-sub">New verified workers ready to help you today</p>
+      <div class="workers-grid" id="recentWorkers"></div>
+      <div style="text-align:center;margin-top:2.5rem;">
+        <a href="pages/services.html" class="btn-primary">View all workers →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKER CTA BANNER -->
+  <section class="cta-banner">
+    <div class="container cta-inner">
+      <div>
+        <h2>Are you a service worker in Bengaluru?</h2>
+        <p>List your profile for free. Customers find you on Google and contact you directly. Zero fees, zero commission.</p>
+      </div>
+      <a href="pages/register.html" class="btn-cta">List Yourself Free →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="brand" style="font-size:1.4rem;display:inline-block;margin-bottom:.5rem;">Fix<span>It</span></a>
+        <p style="color:#9ca3af;font-size:.88rem;max-width:260px;line-height:1.6;">Connecting Bengaluru with trusted home service workers. Direct contact, no commission.</p>
+      </div>
+      <div>
+        <div style="color:#6b7280;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.8rem;">Platform</div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="pages/services.html">Find Workers</a>
+          <a href="pages/register.html">Register as Worker</a>
+          <a href="pages/admin.html">Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <div style="color:#6b7280;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.8rem;">Services</div>
+        <div class="footer-links">
+          <a href="pages/services.html?category=Electrician">Electricians</a>
+          <a href="pages/services.html?category=Plumber">Plumbers</a>
+          <a href="pages/services.html?category=Painter">Painters</a>
+          <a href="pages/services.html?category=Civil+Contractor">Civil Contractors</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2024 FixIt Bengaluru. Made with ❤️ for Bengaluru homeowners.</div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP -->
+  <a href="https://wa.me/919999999999?text=Hi%2C+I+need+help+finding+a+worker+on+FixIt" class="fab-wa" target="_blank" title="Chat with us on WhatsApp">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

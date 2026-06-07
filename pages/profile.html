@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Worker Profile — FixIt</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="brand">Fix<span>It</span></a>
+    <div class="nav-links">
+      <a href="services.html">Find Workers</a>
+      <a href="register.html" class="btn-outline">List Yourself Free</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="services.html">Find Workers</a>
+    <a href="register.html">List Yourself Free</a>
+  </div>
+
+  <div id="profileContent" style="padding: 1.5rem 0;">
+    <div style="text-align:center;padding:4rem;color:#6b7280;">Loading profile...</div>
+  </div>
+
+  <!-- STICKY MOBILE CTA -->
+  <div class="sticky-cta" id="stickyCta">
+    <a id="stickyCall" href="#" class="profile-btn-call" style="flex:1;text-align:center;justify-content:center;">📞 Call Now</a>
+    <a id="stickyWa" href="#" target="_blank" class="profile-btn-wa" style="flex:1;text-align:center;justify-content:center;">💬 WhatsApp</a>
+  </div>
+
+  <a href="https://wa.me/919999999999?text=Hi%2C+I+need+help+finding+a+worker+on+FixIt" class="fab-wa" target="_blank">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="../js/data.js"></script>
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("open");
+    }
+
+    function renderStars(rating) {
+      if (!rating) return "☆☆☆☆☆";
+      const full = Math.floor(rating);
+      let s = "★".repeat(full);
+      if (rating % 1 >= 0.5) s += "½";
+      while (s.replace("½","x").length < 5) s += "☆";
+      return s;
+    }
+
+    const SAMPLE_REVIEWS = [
+      { name: "Anitha S.", rating: 5, text: "Excellent work! Very professional and completed on time. Highly recommend.", date: "15 Mar 2024" },
+      { name: "Ramesh K.", rating: 5, text: "Great service at a fair price. Will definitely call again.", date: "2 Mar 2024" },
+      { name: "Priya M.", rating: 4, text: "Good work overall. Came on time and was very polite.", date: "18 Feb 2024" }
+    ];
+
+    window.addEventListener("DOMContentLoaded", function() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const all = getAllWorkers();
+      const w = all.find(x => String(x.id) === String(id));
+
+      if (!w) {
+        document.getElementById("profileContent").innerHTML = `
+          <div style="text-align:center;padding:4rem;">
+            <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+            <h2 style="font-family:'Sora',sans-serif;margin-bottom:.5rem;">Worker not found</h2>
+            <p style="color:#6b7280;margin-bottom:1.5rem;">This profile may have been removed.</p>
+            <a href="services.html" class="btn-primary">Browse all workers</a>
+          </div>`;
+        return;
+      }
+
+      document.title = `${w.name} — FixIt`;
+      const icon = SKILL_ICONS[w.skill] || "🔧";
+      const initials = w.name.split(" ").map(n=>n[0]).join("").substring(0,2).toUpperCase();
+      const waMsg = encodeURIComponent(`Hi ${w.name}, I found you on FixIt and need help with ${w.skill}. Can we connect?`);
+
+      const services = (w.services||[]).map(s=>`<span class="service-tag">${s}</span>`).join("");
+      const areas = (w.areas||[w.area]).map(a=>`<span class="area-tag">📍 ${a}</span>`).join("");
+      const reviews = SAMPLE_REVIEWS.map(r => `
+        <div class="review-item">
+          <div class="review-top">
+            <span class="reviewer-name">${r.name}</span>
+            <span class="review-date">${r.date}</span>
+          </div>
+          <div class="stars" style="font-size:.85rem;color:#f59e0b;">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>
+          <div class="review-text" style="margin-top:.3rem;">${r.text}</div>
+        </div>`).join("");
+
+      document.getElementById("profileContent").innerHTML = `
+        <div class="profile-page">
+          <a href="services.html" style="display:inline-flex;align-items:center;gap:.4rem;color:#6b7280;font-size:.88rem;margin-bottom:1.5rem;">← Back to results</a>
+
+          <div class="profile-header">
+            <div class="profile-avatar">${initials}</div>
+            <div class="profile-info">
+              <div class="profile-name">${w.name}</div>
+              <div class="profile-badges">
+                <span class="badge-skill">${icon} ${w.skill}</span>
+                ${w.verified ? '<span class="badge-verified">✅ Verified</span>' : '<span style="background:#f3f4f6;color:#6b7280;font-size:.7rem;padding:.2rem .6rem;border-radius:99px;">Unverified</span>'}
+              </div>
+              <div class="profile-meta">
+                <span>📍 ${w.area}</span>
+                <span>🕐 ${w.experience} years experience</span>
+                ${w.rating > 0 ? `<span><span style="color:#f59e0b;">★</span> ${Number(w.rating).toFixed(1)} (${w.reviews} reviews)</span>` : `<span>⭐ New on FixIt</span>`}
+              </div>
+              <div class="profile-btns">
+                <a href="tel:${w.phone}" class="profile-btn-call">📞 Call Now</a>
+                <a href="https://wa.me/91${w.whatsapp}?text=${waMsg}" target="_blank" class="profile-btn-wa">💬 WhatsApp</a>
+                <button onclick="copyLink()" style="padding:.7rem 1.2rem;border-radius:99px;border:1.5px solid #e5e7eb;background:#f9fafb;cursor:pointer;font-family:'Sora',sans-serif;font-size:.88rem;font-weight:600;">🔗 Share</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>About ${w.name.split(" ")[0]}</h3>
+            <p style="color:#374151;font-size:.93rem;line-height:1.7;">${w.bio || "Experienced professional ready to help you."}</p>
+          </div>
+
+          <div class="profile-section">
+            <h3>Services offered</h3>
+            <div class="services-tags">${services || '<span style="color:#6b7280;font-size:.88rem;">Details coming soon</span>'}</div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Areas served</h3>
+            <div class="areas-tags">${areas}</div>
+          </div>
+
+          ${w.reviews > 0 ? `
+          <div class="profile-section">
+            <h3>Customer reviews (${w.reviews})</h3>
+            ${reviews}
+          </div>` : `
+          <div class="profile-section" style="text-align:center;color:#6b7280;padding:2rem;">
+            <div style="font-size:2rem;margin-bottom:.5rem;">💬</div>
+            <p>No reviews yet. Be the first to work with ${w.name.split(" ")[0]}!</p>
+          </div>`}
+
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:1.5rem;text-align:center;margin-top:1rem;">
+            <p style="color:#166534;font-size:.9rem;font-weight:500;">💡 Contact directly — no booking fees, no commission. 100% free for customers.</p>
+          </div>
+        </div>`;
+
+      // Set sticky CTA links
+      document.getElementById("stickyCall").href = `tel:${w.phone}`;
+      document.getElementById("stickyWa").href = `https://wa.me/91${w.whatsapp}?text=${waMsg}`;
+    });
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("Profile link copied! Share it with anyone.");
+      });
+    }
+  </script>
+</body>
+</html>

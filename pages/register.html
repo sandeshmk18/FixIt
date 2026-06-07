@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register as Worker — FixIt</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="brand">Fix<span>It</span></a>
+    <div class="nav-links">
+      <a href="services.html">Find Workers</a>
+    </div>
+    <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')">&#9776;</button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="services.html">Find Workers</a>
+  </div>
+
+  <div class="page-hero">
+    <h1>List Yourself on FixIt</h1>
+    <p>Free profile · Customers call you directly · No commission</p>
+  </div>
+
+  <div class="register-page">
+
+    <!-- PROGRESS -->
+    <div id="progressWrap">
+      <div class="progress-bar">
+        <div class="progress-step active" id="ps1"></div>
+        <div class="progress-step" id="ps2"></div>
+        <div class="progress-step" id="ps3"></div>
+      </div>
+      <div class="step-label" id="stepLabel">Step 1 of 3 — Personal Details</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="form-card" id="step1">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="fname" placeholder="e.g. Ravi Kumar"/>
+        <div class="form-error" id="err-fname"></div>
+      </div>
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="tel" id="fphone" placeholder="10-digit mobile number" maxlength="10"/>
+        <div class="form-error" id="err-fphone"></div>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp Number</label>
+        <input type="tel" id="fwhatsapp" placeholder="Leave blank if same as phone" maxlength="10"/>
+        <label class="checkbox-item" style="margin-top:.4rem;">
+          <input type="checkbox" id="samePhone" onchange="toggleSamePhone()"/> Same as phone number
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Short Bio</label>
+        <textarea id="fbio" placeholder="Tell customers about your experience, speciality, and why they should hire you..."></textarea>
+      </div>
+      <div class="form-footer">
+        <button class="btn-next" onclick="goStep(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-card" id="step2" style="display:none;">
+      <div class="form-group">
+        <label>Your Skill / Service Category *</label>
+        <select id="fskill">
+          <option value="">Select your main skill</option>
+          <option>Electrician</option>
+          <option>Plumber</option>
+          <option>Civil Contractor</option>
+          <option>Painter</option>
+          <option>Carpenter</option>
+          <option>AC Repair</option>
+          <option>Home Cleaning</option>
+          <option>Locksmith</option>
+          <option>Packers & Movers</option>
+          <option>Gardener</option>
+          <option>Fabricator</option>
+          <option>Interior Designer</option>
+        </select>
+        <div class="form-error" id="err-fskill"></div>
+      </div>
+      <div class="form-group">
+        <label>Years of Experience *</label>
+        <input type="number" id="fexp" placeholder="e.g. 5" min="0" max="50"/>
+        <div class="form-error" id="err-fexp"></div>
+      </div>
+      <div class="form-group">
+        <label>Areas you serve in Bengaluru * (select all that apply)</label>
+        <div class="checkbox-grid" id="areasGrid"></div>
+        <div class="form-error" id="err-fareas"></div>
+      </div>
+      <div class="form-group">
+        <label>Services you offer</label>
+        <input type="text" id="fservices" placeholder="e.g. Home wiring, Switchboard repair, Fan fitting (comma separated)"/>
+      </div>
+      <div class="form-footer">
+        <button class="btn-back" onclick="goStep(1)">← Back</button>
+        <button class="btn-next" onclick="goStep(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="form-card" id="step3" style="display:none;">
+      <h3 style="font-family:'Sora',sans-serif;margin-bottom:1.2rem;font-size:1.1rem;">Review your profile</h3>
+      <div id="summaryBox" style="background:#f9fafb;border-radius:10px;padding:1.2rem;margin-bottom:1.5rem;font-size:.9rem;line-height:2;color:#374151;"></div>
+      <div class="form-group">
+        <label class="checkbox-item">
+          <input type="checkbox" id="agreeCheck"/>
+          I agree to be listed publicly on FixIt and confirm my details are correct.
+        </label>
+        <div class="form-error" id="err-agree"></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-back" onclick="goStep(2)">← Back</button>
+        <button class="btn-submit" onclick="submitForm()">Submit & Go Live 🚀</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="successScreen" style="display:none;">
+      <div class="success-icon">🎉</div>
+      <h2>You're listed on FixIt!</h2>
+      <p>Customers in Bengaluru can now find and contact you. Share your profile link to get more calls.</p>
+      <div style="display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+        <a href="services.html" class="btn-primary">View all workers</a>
+        <button onclick="shareProfile()" style="padding:.75rem 2rem;border-radius:99px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;">🔗 Share profile</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script>
+    // Build areas checkboxes
+    const areasGrid = document.getElementById("areasGrid");
+    ["Koramangala","HSR Layout","Whitefield","Indiranagar","Jayanagar",
+     "Marathahalli","Electronic City","Hebbal","BTM Layout",
+     "Banashankari","JP Nagar","Yeshwanthpur"].forEach(a => {
+      areasGrid.innerHTML += `
+        <label class="checkbox-item">
+          <input type="checkbox" name="area" value="${a}"/> ${a}
+        </label>`;
+    });
+
+    function toggleSamePhone() {
+      const same = document.getElementById("samePhone").checked;
+      const wa = document.getElementById("fwhatsapp");
+      if (same) { wa.value = document.getElementById("fphone").value; wa.disabled = true; }
+      else { wa.disabled = false; }
+    }
+
+    function clearErrors() {
+      document.querySelectorAll(".form-error").forEach(e => e.textContent = "");
+    }
+
+    function showError(id, msg) {
+      document.getElementById(id).textContent = msg;
+    }
+
+    function validateStep1() {
+      let ok = true;
+      const name = document.getElementById("fname").value.trim();
+      const phone = document.getElementById("fphone").value.trim();
+      if (!name) { showError("err-fname", "Please enter your full name."); ok = false; }
+      if (!phone || phone.length !== 10 || isNaN(phone)) { showError("err-fphone", "Please enter a valid 10-digit phone number."); ok = false; }
+      return ok;
+    }
+
+    function validateStep2() {
+      let ok = true;
+      const skill = document.getElementById("fskill").value;
+      const exp = document.getElementById("fexp").value;
+      const areas = [...document.querySelectorAll("input[name='area']:checked")].map(c => c.value);
+      if (!skill) { showError("err-fskill", "Please select your skill."); ok = false; }
+      if (!exp || isNaN(exp) || exp < 0) { showError("err-fexp", "Please enter valid years of experience."); ok = false; }
+      if (areas.length === 0) { showError("err-fareas", "Please select at least one area."); ok = false; }
+      return ok;
+    }
+
+    function goStep(n) {
+      clearErrors();
+      if (n === 2 && !validateStep1()) return;
+      if (n === 3 && !validateStep2()) return;
+      if (n === 3) buildSummary();
+
+      [1,2,3].forEach(i => {
+        document.getElementById("step" + i).style.display = i === n ? "block" : "none";
+        const ps = document.getElementById("ps" + i);
+        if (i < n) { ps.className = "progress-step done"; }
+        else if (i === n) { ps.className = "progress-step active"; }
+        else { ps.className = "progress-step"; }
+      });
+
+      const labels = ["Step 1 of 3 — Personal Details", "Step 2 of 3 — Work Details", "Step 3 of 3 — Review & Submit"];
+      document.getElementById("stepLabel").textContent = labels[n-1];
+      window.scrollTo({top: 0, behavior: "smooth"});
+
+      // Save progress
+      saveProgress();
+    }
+
+    function buildSummary() {
+      const areas = [...document.querySelectorAll("input[name='area']:checked")].map(c => c.value);
+      const services = document.getElementById("fservices").value.trim();
+      document.getElementById("summaryBox").innerHTML = `
+        <div><strong>Name:</strong> ${document.getElementById("fname").value}</div>
+        <div><strong>Phone:</strong> ${document.getElementById("fphone").value}</div>
+        <div><strong>Skill:</strong> ${document.getElementById("fskill").value}</div>
+        <div><strong>Experience:</strong> ${document.getElementById("fexp").value} years</div>
+        <div><strong>Areas:</strong> ${areas.join(", ")}</div>
+        <div><strong>Services:</strong> ${services || "Not specified"}</div>
+        <div><strong>Bio:</strong> ${document.getElementById("fbio").value || "Not provided"}</div>
+      `;
+    }
+
+    function saveProgress() {
+      const data = {
+        name: document.getElementById("fname").value,
+        phone: document.getElementById("fphone").value,
+        bio: document.getElementById("fbio").value,
+        skill: document.getElementById("fskill").value,
+        exp: document.getElementById("fexp").value,
+      };
+      localStorage.setItem("fixit_reg_draft", JSON.stringify(data));
+    }
+
+    function loadProgress() {
+      const draft = JSON.parse(localStorage.getItem("fixit_reg_draft") || "{}");
+      if (draft.name) document.getElementById("fname").value = draft.name;
+      if (draft.phone) document.getElementById("fphone").value = draft.phone;
+      if (draft.bio) document.getElementById("fbio").value = draft.bio;
+      if (draft.skill) document.getElementById("fskill").value = draft.skill;
+      if (draft.exp) document.getElementById("fexp").value = draft.exp;
+    }
+
+    function submitForm() {
+      clearErrors();
+      if (!document.getElementById("agreeCheck").checked) {
+        showError("err-agree", "Please agree to the terms to continue.");
+        return;
+      }
+      const areas = [...document.querySelectorAll("input[name='area']:checked")].map(c => c.value);
+      const rawServices = document.getElementById("fservices").value.trim();
+      const services = rawServices ? rawServices.split(",").map(s=>s.trim()).filter(Boolean) : [];
+      const wa = document.getElementById("fwhatsapp").value.trim();
+
+      const workerData = {
+        name: document.getElementById("fname").value.trim(),
+        phone: document.getElementById("fphone").value.trim(),
+        whatsapp: wa || document.getElementById("fphone").value.trim(),
+        bio: document.getElementById("fbio").value.trim(),
+        skill: document.getElementById("fskill").value,
+        experience: parseInt(document.getElementById("fexp").value),
+        experience_years: parseInt(document.getElementById("fexp").value),
+        area: areas[0],
+        areas: areas,
+        services: services,
+        photo: "",
+        rating: 0,
+        reviews: 0,
+        verified: false,
+        joined: new Date().toISOString().split("T")[0]
+      };
+
+      saveWorker(workerData);
+      localStorage.removeItem("fixit_reg_draft");
+
+      // Show success
+      document.getElementById("step3").style.display = "none";
+      document.getElementById("progressWrap").style.display = "none";
+      document.getElementById("successScreen").style.display = "block";
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    function shareProfile() {
+      navigator.clipboard.writeText(window.location.origin + "/pages/services.html").then(() => {
+        alert("Link copied! Share it with people who need services.");
+      });
+    }
+
+    // Load saved progress on page load
+    loadProgress();
+  </script>
+</body>
+</html>
