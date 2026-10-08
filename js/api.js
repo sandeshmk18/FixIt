@@ -84,7 +84,9 @@ async function apiRequest(path, options = {}) {
     const message = Array.isArray(detail)
       ? detail.map((entry) => entry.msg || entry).join("; ")
       : String(detail || "Request failed");
-    throw new Error(message);
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
   }
 
   return payload;
@@ -225,6 +227,14 @@ async function getBookings() {
   }
 }
 
+async function getMyBookings() {
+  const bookings = await apiRequest("/api/bookings");
+  if (!Array.isArray(bookings)) {
+    throw new Error("Unexpected bookings response");
+  }
+  return bookings;
+}
+
 async function updateBookingStatus(bookingId, status) {
   return apiRequest(`/api/bookings/${encodeURIComponent(bookingId)}`, {
     method: "PATCH",
@@ -291,6 +301,7 @@ window.FixItAPI = {
   getServices,
   createBooking,
   getBookings,
+  getMyBookings,
   updateBookingStatus,
   createReview,
   getAdminStats,

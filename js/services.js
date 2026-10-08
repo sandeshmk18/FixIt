@@ -20,12 +20,38 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+  initCustomerBookingsNavigation();
   initMobileMenu();
   initFilters();
   initCurrentYear();
   loadFiltersFromUrl();
   applyFilters();
 });
+
+function initCustomerBookingsNavigation() {
+  const user = window.FixItAPI?.getStoredUser?.();
+  if (String(user?.role || "").toLowerCase() !== "customer") {
+    return;
+  }
+
+  document.querySelectorAll(".nav-links, .mobile-menu").forEach((nav) => {
+    if (nav.querySelector("[data-my-bookings-link]")) {
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = "bookings.html";
+    link.textContent = "My Bookings";
+    link.dataset.myBookingsLink = "true";
+
+    const authLink = nav.querySelector("[data-auth-link]");
+    if (authLink) {
+      nav.insertBefore(link, authLink);
+    } else {
+      nav.appendChild(link);
+    }
+  });
+}
 
 
 /* =========================================================

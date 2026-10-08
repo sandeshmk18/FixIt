@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="View your FixIt service booking requests and their current status." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>My Bookings — FixIt</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="../js/api.js?v=my-bookings-1" defer></script>
+  <script src="../js/bookings.js" defer></script>
+  <script src="../js/main.js?v=my-bookings-1" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a href="../index.html" class="brand" aria-label="FixIt home">Fix<span>It</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="services.html">Find Workers</a>
+      <a href="register.html" class="btn-outline">List Yourself Free</a>
+      <a href="login.html" class="btn-outline" data-auth-link>Login</a>
+    </nav>
+    <button type="button" class="hamburger" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">☰</button>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" hidden>
+    <a href="services.html">Find Workers</a>
+    <a href="register.html">List Yourself Free</a>
+  </nav>
+
+  <main>
+    <section class="page-hero bookings-page-hero" aria-labelledby="bookingsTitle">
+      <div class="container">
+        <span class="section-kicker">YOUR ACCOUNT</span>
+        <h1 id="bookingsTitle">My Bookings</h1>
+        <p>Review your service requests and their latest status.</p>
+      </div>
+    </section>
+
+    <section class="customer-bookings-section" aria-label="Customer bookings">
+      <div class="container">
+        <div id="bookingFilters" class="booking-filters" role="group" aria-label="Filter bookings"></div>
+        <div id="bookingsList" class="customer-bookings-grid" aria-live="polite">
+          <p class="bookings-loading-state">Loading your bookings...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="bookingDetailsDialog" class="booking-details-dialog" aria-labelledby="bookingDetailsTitle">
+    <div class="booking-dialog-content">
+      <button type="button" class="booking-dialog-close" data-close-booking-details aria-label="Close booking details">×</button>
+      <span class="section-kicker">BOOKING DETAILS</span>
+      <h2 id="bookingDetailsTitle">Booking details</h2>
+      <dl id="bookingDetailsFields" class="booking-details-list"></dl>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      © <span id="currentYear"></span> FixIt. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

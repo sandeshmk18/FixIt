@@ -63,7 +63,7 @@
   </main>
 
   <script src="../js/api.js" defer></script>
-  <script src="../js/main.js" defer></script>
+  <script src="../js/main.js?v=my-bookings-1" defer></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loginForm = document.getElementById("loginForm");
@@ -89,7 +89,11 @@
           const result = await window.FixItAPI.loginUser(email, password);
           if (result && result.access_token) {
             const user = await window.FixItAPI.getCurrentUser();
-            window.location.href = user && user.role === "admin" ? "admin.html" : "services.html";
+            const requestedPage = new URLSearchParams(window.location.search).get("next");
+            const destination = user?.role === "customer" && requestedPage === "bookings.html"
+              ? requestedPage
+              : user && user.role === "admin" ? "admin.html" : "services.html";
+            window.location.href = destination;
           }
         } catch (error) {
           errorNode.textContent = error.message || "Unable to log in. Please try again.";

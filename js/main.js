@@ -266,13 +266,43 @@ function resolveAuthPage(targetPage) {
   return window.location.pathname.includes("/pages/") ? targetPage : `pages/${targetPage}`;
 }
 
+function syncCustomerBookingsNavigation(user) {
+  const isCustomer = String(user?.role || "").toLowerCase() === "customer";
+  const navs = document.querySelectorAll(".nav-links, .mobile-menu");
+
+  navs.forEach((nav) => {
+    const existingLink = nav.querySelector("[data-my-bookings-link]");
+    if (!isCustomer) {
+      existingLink?.remove();
+      return;
+    }
+
+    if (existingLink) {
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = resolveAuthPage("bookings.html");
+    link.textContent = "My Bookings";
+    link.dataset.myBookingsLink = "true";
+
+    const authLink = nav.querySelector("[data-auth-link]");
+    if (authLink) {
+      nav.insertBefore(link, authLink);
+    } else {
+      nav.appendChild(link);
+    }
+  });
+}
+
 function syncAuthNavigation() {
   const authLinks = document.querySelectorAll("[data-auth-link]");
-  if (!authLinks.length || !window.FixItAPI || typeof window.FixItAPI.getStoredUser !== "function") {
+  if (!window.FixItAPI || typeof window.FixItAPI.getStoredUser !== "function") {
     return;
   }
 
   const user = window.FixItAPI.getStoredUser();
+  syncCustomerBookingsNavigation(user);
 
   authLinks.forEach((link) => {
     if (!user) {
