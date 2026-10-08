@@ -1,0 +1,22 @@
+# Local environment files
+.env
+.env.*
+!.env.example
+.venv/
+
+# Dependency caches
+node_modules/
+**/__pycache__/
+**/*.pyc
+**/pycache__/
+
+# Generated local data
+*.db
+.pytest_cache/
+
+# Logs and OS files
+*.log
+.DS_Store
+
+# VS Code
+.vscode/

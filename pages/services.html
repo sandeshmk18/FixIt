@@ -1,192 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Find local service workers in Bengaluru with FixIt."
+  >
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
   <title>Find Workers — FixIt Bengaluru</title>
-  <link rel="stylesheet" href="../css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
 </head>
+
 <body>
 
-  <nav class="navbar">
-    <a href="../index.html" class="brand">Fix<span>It</span></a>
-    <div class="nav-links">
-      <a href="services.html">Find Workers</a>
-      <a href="register.html" class="btn-outline">List Yourself Free</a>
-    </div>
-    <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <header class="navbar">
+    <a href="../index.html" class="brand" aria-label="FixIt home">
+      Fix<span>It</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="services.html" aria-current="page">
+        Find Workers
+      </a>
+
+      <a href="register.html" class="btn-outline">
+        List Yourself Free
+      </a>
+      <a href="login.html" class="btn-outline" data-auth-link>Login</a>
+    </nav>
+
+    <button
+      type="button"
+      class="hamburger"
+      id="menuToggle"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      ☰
+    </button>
+  </header>
+
+  <nav
+    class="mobile-menu"
+    id="mobileMenu"
+    aria-label="Mobile navigation"
+    hidden
+  >
+    <a href="services.html" aria-current="page">
+      Find Workers
+    </a>
+
+    <a href="register.html">
+      List Yourself Free
+    </a>
   </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="services.html">Find Workers</a>
-    <a href="register.html">List Yourself Free</a>
-  </div>
 
-  <div class="page-hero">
-    <h1 id="pageTitle">Find Workers in Bengaluru</h1>
-    <p id="pageSubtitle">Browse verified service workers near you</p>
-  </div>
 
-  <div class="filter-bar">
-    <span class="filter-label">Filter:</span>
-    <select class="filter-select" id="filterCategory" onchange="applyFilters()">
-      <option value="">All Services</option>
-      <option>Electrician</option>
-      <option>Plumber</option>
-      <option>Civil Contractor</option>
-      <option>Painter</option>
-      <option>Carpenter</option>
-      <option>AC Repair</option>
-      <option>Home Cleaning</option>
-      <option>Locksmith</option>
-      <option>Packers & Movers</option>
-      <option>Gardener</option>
-      <option>Fabricator</option>
-      <option>Interior Designer</option>
-    </select>
-    <select class="filter-select" id="filterArea" onchange="applyFilters()">
-      <option value="">All Areas</option>
-      <option>Koramangala</option>
-      <option>HSR Layout</option>
-      <option>Whitefield</option>
-      <option>Indiranagar</option>
-      <option>Jayanagar</option>
-      <option>Marathahalli</option>
-      <option>Electronic City</option>
-      <option>Hebbal</option>
-      <option>BTM Layout</option>
-      <option>Banashankari</option>
-      <option>JP Nagar</option>
-      <option>Yeshwanthpur</option>
-    </select>
-    <select class="filter-select" id="filterRating" onchange="applyFilters()">
-      <option value="">Any Rating</option>
-      <option value="4">4+ Stars</option>
-      <option value="3">3+ Stars</option>
-    </select>
-    <select class="filter-select" id="sortBy" onchange="applyFilters()">
-      <option value="rating">Sort: Top Rated</option>
-      <option value="newest">Sort: Newest</option>
-      <option value="experience">Sort: Most Experienced</option>
-    </select>
-    <span class="results-count" id="resultsCount"></span>
-  </div>
+  <!-- =========================
+       PAGE HERO
+  ========================== -->
 
-  <div class="services-main">
-    <div class="workers-grid" id="workersGrid"></div>
-    <div id="emptyState" class="empty-state" style="display:none;">
-      <div class="empty-icon">🔍</div>
-      <h3>No workers found</h3>
-      <p>Try changing your filters or check back later as more workers join.</p>
-      <br/>
-      <a href="register.html" class="btn-primary">Know a worker? Refer them →</a>
-    </div>
-  </div>
+  <main>
 
-  <a href="https://wa.me/919999999999?text=Hi%2C+I+need+help+finding+a+worker+on+FixIt" class="fab-wa" target="_blank">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </a>
+    <section class="page-hero" aria-labelledby="pageTitle">
+      <div class="container">
 
-  <script src="../js/data.js"></script>
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("open");
-    }
+        <span class="section-kicker">
+          FIXIT MARKETPLACE
+        </span>
 
-    function getAvatar(name) {
-      return name.split(" ").map(n => n[0]).join("").substring(0,2).toUpperCase();
-    }
+        <h1 id="pageTitle">
+          Find Workers in Bengaluru
+        </h1>
 
-    function renderStars(rating) {
-      if (!rating) return "☆☆☆☆☆";
-      const full = Math.floor(rating);
-      let s = "★".repeat(full);
-      if (rating % 1 >= 0.5) s += "½";
-      while (s.replace("½","x").length < 5) s += "☆";
-      return s;
-    }
+        <p id="pageSubtitle">
+          Browse local service workers and find the right person for your job.
+        </p>
 
-    function renderCard(w) {
-      const initials = getAvatar(w.name);
-      const icon = SKILL_ICONS[w.skill] || "🔧";
-      const waMsg = encodeURIComponent(`Hi ${w.name}, I found you on FixIt and need help with ${w.skill}. Can we connect?`);
-      return `
-        <div class="worker-card">
-          <div class="wc-top">
-            <div class="wc-avatar">${initials}</div>
-            <div class="wc-info">
-              <div class="wc-name">${w.name}</div>
-              <div class="wc-badges">
-                <span class="badge-skill">${icon} ${w.skill}</span>
-                ${w.verified ? '<span class="badge-verified">✅ Verified</span>' : ""}
-              </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         FILTERS
+    ========================== -->
+
+    <section class="filter-section" aria-label="Worker filters">
+      <div class="container">
+
+        <form
+          class="filter-bar"
+          id="filterForm"
+          autocomplete="off"
+        >
+
+          <div class="filter-heading">
+            <span class="filter-label">
+              Find the right worker
+            </span>
+
+            <span
+              class="results-count"
+              id="resultsCount"
+              aria-live="polite"
+            ></span>
+          </div>
+
+
+          <div class="filter-controls">
+
+            <div class="filter-field">
+              <label for="filterCategory">
+                Service
+              </label>
+
+              <select
+                class="filter-select"
+                id="filterCategory"
+                name="category"
+              >
+                <option value="">All Services</option>
+                <option value="Electrician">Electrician</option>
+                <option value="Plumber">Plumber</option>
+                <option value="Civil Contractor">Civil Contractor</option>
+                <option value="Painter">Painter</option>
+                <option value="Carpenter">Carpenter</option>
+                <option value="AC Repair">AC Repair</option>
+                <option value="Home Cleaning">Home Cleaning</option>
+                <option value="Locksmith">Locksmith</option>
+                <option value="Packers & Movers">Packers & Movers</option>
+                <option value="Gardener">Gardener</option>
+                <option value="Fabricator">Fabricator</option>
+                <option value="Interior Designer">Interior Designer</option>
+              </select>
             </div>
+
+
+            <div class="filter-field">
+              <label for="filterArea">
+                Area
+              </label>
+
+              <select
+                class="filter-select"
+                id="filterArea"
+                name="area"
+              >
+                <option value="">All Areas</option>
+                <option value="Koramangala">Koramangala</option>
+                <option value="HSR Layout">HSR Layout</option>
+                <option value="Whitefield">Whitefield</option>
+                <option value="Indiranagar">Indiranagar</option>
+                <option value="Jayanagar">Jayanagar</option>
+                <option value="Marathahalli">Marathahalli</option>
+                <option value="Electronic City">Electronic City</option>
+                <option value="Hebbal">Hebbal</option>
+                <option value="BTM Layout">BTM Layout</option>
+                <option value="Banashankari">Banashankari</option>
+                <option value="JP Nagar">JP Nagar</option>
+                <option value="Yeshwanthpur">Yeshwanthpur</option>
+              </select>
+            </div>
+
+
+            <div class="filter-field">
+              <label for="filterRating">
+                Minimum rating
+              </label>
+
+              <select
+                class="filter-select"
+                id="filterRating"
+                name="rating"
+              >
+                <option value="">Any Rating</option>
+                <option value="4">4+ Stars</option>
+                <option value="3">3+ Stars</option>
+              </select>
+            </div>
+
+
+            <div class="filter-field">
+              <label for="sortBy">
+                Sort by
+              </label>
+
+              <select
+                class="filter-select"
+                id="sortBy"
+                name="sort"
+              >
+                <option value="rating">Top Rated</option>
+                <option value="newest">Newest</option>
+                <option value="experience">Most Experienced</option>
+              </select>
+            </div>
+
           </div>
-          <div class="wc-meta">
-            <span>📍 ${w.area}</span>
-            <span>🕐 ${w.experience} yrs exp</span>
+
+        </form>
+
+      </div>
+    </section>
+
+
+    <!-- =========================
+         WORKER RESULTS
+    ========================== -->
+
+    <section
+      class="services-main"
+      aria-labelledby="workersHeading"
+    >
+      <div class="container">
+
+        <div class="section-heading-row">
+
+          <div>
+            <span class="section-kicker">
+              LOCAL PROFESSIONALS
+            </span>
+
+            <h2 id="workersHeading">
+              Available workers
+            </h2>
           </div>
-          <div class="wc-rating">
-            <span class="stars">${renderStars(w.rating)}</span>
-            <span class="rating-num">${w.rating > 0 ? Number(w.rating).toFixed(1) : "New"}</span>
-            ${w.reviews > 0 ? `<span class="rating-count">(${w.reviews} reviews)</span>` : ""}
-          </div>
-          <div class="wc-btns">
-            <a href="tel:${w.phone}" class="btn-call">📞 Call</a>
-            <a href="https://wa.me/91${w.whatsapp}?text=${waMsg}" target="_blank" class="btn-wa">💬 WhatsApp</a>
-            <a href="profile.html?id=${w.id}" class="btn-view">View</a>
-          </div>
+
         </div>
-      `;
-    }
 
-    function applyFilters() {
-      const cat = document.getElementById("filterCategory").value;
-      const area = document.getElementById("filterArea").value;
-      const minRating = parseFloat(document.getElementById("filterRating").value) || 0;
-      const sort = document.getElementById("sortBy").value;
 
-      let results = getAllWorkers();
+        <div
+          class="workers-grid"
+          id="workersGrid"
+          aria-live="polite"
+        ></div>
 
-      if (cat) results = results.filter(w => w.skill === cat);
-      if (area) results = results.filter(w => w.area === area || (w.areas && w.areas.includes(area)));
-      if (minRating) results = results.filter(w => w.rating >= minRating);
 
-      if (sort === "rating") results.sort((a,b) => b.rating - a.rating);
-      else if (sort === "newest") results.sort((a,b) => new Date(b.joined) - new Date(a.joined));
-      else if (sort === "experience") results.sort((a,b) => b.experience - a.experience);
+        <div
+          id="emptyState"
+          class="empty-state"
+          hidden
+        >
+          <div
+            class="empty-icon"
+            aria-hidden="true"
+          >
+            🔍
+          </div>
 
-      const grid = document.getElementById("workersGrid");
-      const empty = document.getElementById("emptyState");
-      const countEl = document.getElementById("resultsCount");
+          <h3>
+            No workers found
+          </h3>
 
-      if (results.length === 0) {
-        grid.innerHTML = "";
-        empty.style.display = "block";
-        countEl.textContent = "0 workers found";
-      } else {
-        grid.innerHTML = results.map(renderCard).join("");
-        empty.style.display = "none";
-        countEl.textContent = `${results.length} worker${results.length !== 1 ? "s" : ""} found`;
-      }
-    }
+          <p>
+            Try changing your filters or check back later as more workers join FixIt.
+          </p>
 
-    // Read URL params on load
-    window.addEventListener("DOMContentLoaded", function() {
-      const params = new URLSearchParams(window.location.search);
-      const cat = params.get("category");
-      const area = params.get("area");
+          <a
+            href="register.html"
+            class="btn-primary"
+          >
+            Know a worker? Refer them →
+          </a>
+        </div>
 
-      if (cat) {
-        document.getElementById("filterCategory").value = cat;
-        document.getElementById("pageTitle").textContent = `${cat}s in Bengaluru`;
-        document.getElementById("pageSubtitle").textContent = `Find trusted ${cat.toLowerCase()}s near you`;
-      }
-      if (area) {
-        document.getElementById("filterArea").value = area;
-      }
-      applyFilters();
-    });
-  </script>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="worker-cta">
+      <div class="container">
+
+        <div class="cta-content">
+
+          <div>
+            <span class="section-kicker">
+              GROW WITH FIXIT
+            </span>
+
+            <h2>
+              Are you a local service professional?
+            </h2>
+
+            <p>
+              Create your FixIt profile and let customers discover your services.
+            </p>
+          </div>
+
+          <a
+            href="register.html"
+            class="btn-primary"
+          >
+            List Yourself Free →
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer class="footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <a
+            href="../index.html"
+            class="brand"
+            aria-label="FixIt home"
+          >
+            Fix<span>It</span>
+          </a>
+
+          <p>
+            Connecting Bengaluru with local service professionals.
+          </p>
+        </div>
+
+        <div>
+          <h3>Explore</h3>
+
+          <a href="services.html">
+            Find Workers
+          </a>
+
+          <a href="register.html">
+            List Yourself
+          </a>
+        </div>
+
+        <div>
+          <h3>Services</h3>
+
+          <a href="services.html?category=Electrician">
+            Electricians
+          </a>
+
+          <a href="services.html?category=Plumber">
+            Plumbers
+          </a>
+
+          <a href="services.html?category=Carpenter">
+            Carpenters
+          </a>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span>
+          © <span id="currentYear"></span> FixIt. All rights reserved.
+        </span>
+
+        <span>
+          Built for Bengaluru
+        </span>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!--
+    Worker data is loaded before the page logic.
+    No API keys or secrets should ever be placed in these files.
+  -->
+
+  <script src="../js/api.js" defer></script>
+  <script src="../js/data.js" defer></script>
+  <script src="../js/services.js" defer></script>
+
 </body>
 </html>
