@@ -559,6 +559,320 @@ background: var(--primary-dark);
 }
 
 /* =========================================================
+BOOKING FLOW
+========================================================= */
+
+.profile-page {
+display: flex;
+flex-direction: column;
+gap: 20px;
+max-width: 980px;
+margin: 28px auto 80px;
+padding: 0 20px;
+}
+
+.profile-header {
+display: flex;
+align-items: center;
+gap: 22px;
+padding: 28px 24px;
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+background: white;
+box-shadow: var(--shadow-sm);
+}
+
+.profile-avatar {
+display: grid;
+place-items: center;
+width: 82px;
+height: 82px;
+border-radius: 50%;
+background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+color: #166534;
+font-weight: 700;
+font-size: 1.5rem;
+}
+
+.profile-info {
+display: flex;
+flex-direction: column;
+gap: 12px;
+flex: 1;
+}
+
+.profile-name {
+font-family: "Sora", sans-serif;
+font-size: clamp(2rem, 3vw, 2.8rem);
+letter-spacing: -0.04em;
+}
+
+.profile-badges,
+.profile-meta,
+.profile-btns,
+.services-tags,
+.areas-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.badge-skill,
+.badge-verified,
+.badge-unverified,
+.meta-pill,
+.service-tag,
+.area-tag {
+display: inline-flex;
+align-items: center;
+padding: 7px 10px;
+border-radius: 999px;
+font-size: 0.78rem;
+font-weight: 600;
+}
+
+.badge-skill {
+background: #ecfdf5;
+color: #166534;
+}
+
+.badge-verified {
+background: #dcfce7;
+color: #166534;
+}
+
+.badge-unverified {
+background: #f3f4f6;
+color: var(--text-secondary);
+}
+
+.meta-pill {
+background: #f9fafb;
+border: 1px solid var(--border);
+color: var(--text-secondary);
+}
+
+.service-tag,
+.area-tag {
+background: #f8fafc;
+border: 1px solid var(--border);
+color: var(--text);
+}
+
+.profile-btn-call,
+.profile-btn-wa,
+.btn-call,
+.btn-wa,
+.btn-view,
+.booking-form button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 11px 16px;
+border-radius: var(--radius-sm);
+font-weight: 600;
+transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.profile-btn-call,
+.profile-btn-wa,
+.btn-call,
+.btn-wa,
+.booking-form button {
+background: var(--primary);
+color: white;
+}
+
+.profile-btn-wa,
+.btn-wa {
+background: #22c55e;
+}
+
+.profile-btn-call:hover,
+.profile-btn-wa:hover,
+.btn-call:hover,
+.btn-wa:hover,
+.btn-view:hover,
+.booking-form button:hover {
+transform: translateY(-1px);
+opacity: 0.96;
+}
+
+.back-link {
+font-weight: 600;
+color: var(--primary);
+}
+
+.profile-section,
+.booking-panel {
+padding: 28px 24px;
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+background: white;
+box-shadow: var(--shadow-sm);
+}
+
+.profile-section h3,
+.booking-panel h3,
+.my-bookings h4 {
+margin-bottom: 14px;
+font-family: "Sora", sans-serif;
+font-size: 1.1rem;
+}
+
+.profile-section p,
+.booking-login-card p,
+.booking-guard,
+.booking-status-message {
+color: var(--text-secondary);
+}
+
+.booking-form {
+display: grid;
+gap: 16px;
+margin-top: 8px;
+}
+
+.booking-form label {
+display: flex;
+flex-direction: column;
+gap: 8px;
+font-weight: 600;
+color: var(--text);
+}
+
+.booking-form input,
+.booking-form textarea {
+width: 100%;
+padding: 12px 14px;
+border: 1px solid var(--border);
+border-radius: var(--radius-sm);
+background: white;
+color: var(--text);
+}
+
+.booking-form textarea {
+resize: vertical;
+min-height: 120px;
+}
+
+.booking-form input:focus,
+.booking-form textarea:focus {
+outline: 3px solid rgba(22, 163, 74, 0.15);
+border-color: var(--primary);
+}
+
+.booking-form button {
+max-width: 220px;
+border: 0;
+}
+
+.booking-status-message {
+min-height: 24px;
+}
+
+.booking-status-error {
+color: #b91c1c;
+font-weight: 600;
+}
+
+.booking-status-success {
+color: #166534;
+font-weight: 600;
+}
+
+.my-bookings {
+margin-top: 20px;
+}
+
+.booking-list {
+display: grid;
+gap: 12px;
+margin-top: 12px;
+}
+
+.booking-item {
+padding: 16px 18px;
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+background: #f9fafb;
+}
+
+.booking-item-top,
+.booking-item-footer,
+.booking-meta {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+}
+
+.booking-meta {
+flex-direction: column;
+align-items: flex-start;
+margin-top: 12px;
+margin-bottom: 12px;
+color: var(--text-secondary);
+font-size: 0.92rem;
+}
+
+.booking-status {
+display: inline-flex;
+padding: 6px 10px;
+border-radius: 999px;
+font-size: 0.76rem;
+font-weight: 700;
+background: #f3f4f6;
+color: var(--text-secondary);
+text-transform: capitalize;
+}
+
+.booking-status-pending {
+background: #fef3c7;
+color: #92400e;
+}
+
+.booking-status-confirmed,
+.booking-status-approved {
+background: #dcfce7;
+color: #166534;
+}
+
+.booking-status-rejected,
+.booking-status-cancelled {
+background: #fee2e2;
+color: #991b1b;
+}
+
+.booking-empty {
+padding: 18px;
+border: 1px dashed var(--border);
+border-radius: var(--radius-md);
+color: var(--text-secondary);
+background: #fafafa;
+}
+
+.booking-login-card {
+display: flex;
+flex-direction: column;
+gap: 16px;
+padding-top: 8px;
+}
+
+@media (max-width: 700px) {
+.profile-header {
+flex-direction: column;
+align-items: flex-start;
+}
+
+.booking-item-top,
+.booking-item-footer {
+flex-direction: column;
+align-items: flex-start;
+}
+}
+
+/* =========================================================
 CTA
 ========================================================= */
 
